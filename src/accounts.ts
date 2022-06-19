@@ -34,6 +34,7 @@ export const accountMerge = (accounts: Account[]) => {
     indexOfCurrentRelatedEmailGroup++
     relatedEmails.push([])
   })
+  console.log(mergedAccounts)
   return mergedAccounts
 }
 
