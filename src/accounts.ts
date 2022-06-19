@@ -61,19 +61,26 @@ const loopAccounts = (accounts: Account[]) => {
       relatedEmails?.map((emailGroup, i) => {
         if(i !== indexOfCurrentRelatedEmailGroup && emailGroup?.includes(email)) emailAlreadyInGroup = true
       })
-      if(!emailAlreadyInGroup && relatedEmails[indexOfCurrentRelatedEmailGroup]?.includes(email)) {
-        if(!lookedAtIndices.includes(i)) lookedAtIndices.push(i) && indicesOfCurrentRelatedAccounts.push(i)
-        acc.emails.map(currentEmail => {
-          if(currentEmail !== email 
-            && !relatedEmails[indexOfCurrentRelatedEmailGroup].includes(currentEmail) 
-            ){
-              relatedEmails[indexOfCurrentRelatedEmailGroup].push(currentEmail)
-              loopAccounts(accounts)
-            }
-        })
-      }
+      addRelatedEmails(email, i, acc)
     })
   })
+}
+
+const addRelatedEmails = (email: string, relatedEmailsIndex: number, acc: Account) => {
+  if(!emailAlreadyInGroup && relatedEmails[indexOfCurrentRelatedEmailGroup]?.includes(email)) {
+    if(!lookedAtIndices.includes(relatedEmailsIndex)) {
+      lookedAtIndices.push(relatedEmailsIndex)
+      indicesOfCurrentRelatedAccounts.push(relatedEmailsIndex)
+    }
+    acc.emails.map(currentEmail => {
+      if(currentEmail !== email 
+        && !relatedEmails[indexOfCurrentRelatedEmailGroup].includes(currentEmail) 
+        ){
+          relatedEmails[indexOfCurrentRelatedEmailGroup].push(currentEmail)
+          loopAccounts(accounts)
+        }
+    })
+  }
 }
 
 const mergeAccounts = (accounts: Account[]) => {
